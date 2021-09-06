@@ -4,4 +4,4 @@ if(dotenv.error) throw dotenv.error
 
 const Server = require('./models/server')
 
-console.log(Server)
+Server.listen()
