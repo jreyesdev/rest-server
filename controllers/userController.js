@@ -1,6 +1,12 @@
-class UserController{
+const { request, response} = require('express')
 
-    getUsers(req, res){
+class UserController{
+    constructor(){
+        this.req = request
+        this.res = response
+    }
+
+    getUsers(req = this.req, res = this.res){
         res.json([
             {
                 id: 1,
