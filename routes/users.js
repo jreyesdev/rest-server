@@ -1,8 +1,8 @@
 const { Router } = require('express')
 const router = Router()
 
-router.get('',(req,res)=>{
-    res.send('Hello Word')
-})
+const { getUsers } = require('../controllers/userController')
+
+router.get('',getUsers)
 
 module.exports = router
