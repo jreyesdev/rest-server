@@ -28,6 +28,15 @@ class UserController extends Controller{
         })
     }
 
+    getUserById(req = this.req, res = this.res){
+        const { id } = req.params
+        res.json({
+            id,
+            name: 'Lauren Cohan',
+            age: 30,
+        })
+    }
+
     postUser(req = this.req, res = this.res){
         const { name, age } = req.body
         res.json({
