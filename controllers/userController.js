@@ -1,17 +1,21 @@
-const { request, response} = require('express')
+const Controller = require('./controller')
 
-class UserController{
+class UserController extends Controller{
     constructor(){
-        this.req = request
-        this.res = response
+        super()
     }
 
     getUsers(req = this.req, res = this.res){
         res.json([
             {
                 id: 1,
-                name: 'John',
+                name: 'John Doe',
                 age: 33,
+            },
+            {
+                id: 2,
+                name: 'Paul Smith',
+                age: 28,
             }
         ])
     }
