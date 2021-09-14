@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs')
+
 const Controller = require('./controller')
 const Usuario = require('../models/user')
 
@@ -43,6 +45,10 @@ class UserController extends Controller{
         const usuario = new Usuario({
             name, email, password, image, role, google
         })
+        // Encrypta contraseña
+        const salt = bcrypt.genSaltSync()
+        usuario.password = bcrypt.hashSync(usuario.password,salt)
+        await usuario.save()
         res.json({
             message: 'Registered user successfully',
             usuario
