@@ -1,4 +1,5 @@
 const Controller = require('./controller')
+const Usuario = require('../models/user')
 
 class UserController extends Controller{
     constructor(){
@@ -37,17 +38,14 @@ class UserController extends Controller{
         })
     }
 
-    postUser(req = this.req, res = this.res){
-        const { name, age } = req.body
+    async postUser(req = this.req, res = this.res){
+        const { name, email, password, image, role, google } = req.body
+        const usuario = new Usuario({
+            name, email, password, image, role, google
+        })
         res.json({
             message: 'Registered user successfully',
-            data: [
-                {
-                    id: 3,
-                    name: 'Lauren Cohan',
-                    age: 30,
-                }
-            ]
+            usuario
         })
     }
 }
