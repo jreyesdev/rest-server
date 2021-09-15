@@ -36,8 +36,8 @@ class UserController extends Controller{
             // .skip(Number(desde))
             // .limit(Number(limite))
         const [ total, users ] = await Promise.all([
-            Usuario.countDocuments({ delete: true }),
-            Usuario.find({ delete: true })
+            Usuario.countDocuments({ delete: false }),
+            Usuario.find({ delete: false })
                 .skip(Number(desde))
                 .limit(Number(limite))
         ])
@@ -84,6 +84,16 @@ class UserController extends Controller{
         res.json({
             msg: 'Updated user successfully',
             usuario
+        })
+    }
+
+    async deleteUser(req = this.req, res = this.res){
+        const { id } = req.params
+        // const usuario = await Usuario.findByIdAndDelete(id)
+        const usuario = await Usuario.findByIdAndUpdate(id,{delete: true})
+        res.json({
+            msg: 'Delete user successfully',
+            id
         })
     }
 }
