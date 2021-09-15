@@ -54,6 +54,20 @@ class UserController extends Controller{
             usuario
         })
     }
+
+    async putUser(req = this.req, res = this.res){
+        const {id} = req.params
+        const {password, google, email, ...resto} = req.body
+        if(password){
+            const salt = bcrypt.genSaltSync()
+            resto.password = bcrypt.hashSync(password,salt)
+        }
+        const usuario = await Usuario.findByIdAndUpdate(id,resto)
+        res.json({
+            msg: 'Updated user successfully',
+            usuario
+        })
+    }
 }
 
 module.exports = new UserController()
