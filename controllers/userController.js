@@ -8,8 +8,8 @@ class UserController extends Controller{
         super()
     }
 
-    getUsers(req = this.req, res = this.res){
-        res.json({
+    async getUsers(req = this.req, res = this.res){
+        /*res.json({
             total: 2,
             page: 1,
             perPage: 10,
@@ -28,6 +28,24 @@ class UserController extends Controller{
                     age: 28,
                 }
             ]
+        })*/
+        const { limite = 5, desde = 0, page = 1 } = req.query
+
+        // const total = await Usuario.countDocuments({ delete: true })
+        // const users = await Usuario.find({ delete: true })
+            // .skip(Number(desde))
+            // .limit(Number(limite))
+        const [ total, users ] = await Promise.all([
+            Usuario.countDocuments({ delete: true }),
+            Usuario.find({ delete: true })
+                .skip(Number(desde))
+                .limit(Number(limite))
+        ])
+        res.json({
+            limit: limite,
+            skip: desde,
+            total,
+            users
         })
     }
 
