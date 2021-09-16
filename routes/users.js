@@ -4,11 +4,14 @@ const router = Router()
 
 const { getUsers, postUser, getUserById, putUser, deleteUser } = require('../controllers/userController')
 const { validarCampos } = require('../middlewares/fieldsValidate')
+const { validateJWT } = require('../middlewares/jwtValidate')
+const { isAdmin, sameRole } = require('../middlewares/roleValidate')
 const { isValidRol, emailExists, existsIdUser } = require('../helpers/dbValidator')
 
 router.get('',getUsers)
 
 router.get('/:id',[
+    validateJWT,
     check('id').custom(existsIdUser),
     check('role').custom(isValidRol),
     validarCampos
@@ -23,9 +26,15 @@ router.post('',[
     validarCampos
 ],postUser)
 
-router.put('/:id',putUser)
+router.put('/:id',[
+    validateJWT,
+    validarCampos
+],putUser)
 
 router.delete('/:id',[
+    validateJWT,
+    isAdmin,
+    sameRole('SUPER_ADMIN','ADMIN'),
     check('id','El ID no es válido').isMongoId(),
     check('id').custom(existsIdUser),
     validarCampos
