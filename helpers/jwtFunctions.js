@@ -5,7 +5,7 @@ class JWTHand{
         return new Promise((res,rej) => {
             const payload = { uid }
             jwt.sign(payload,process.env.JWT_SECRET,{
-                expiresIn: Math.floor(Date.now() / 1000) + (60 * 60 * 4)
+                expiresIn: '4h'
             },(err,token) =>{
                 if(err){
                     console.log(err)
@@ -15,6 +15,9 @@ class JWTHand{
                 res(token)
             })
         })
+    }
+    validar(token){
+        return jwt.verify(token, process.env.JWT_SECRET)
     }
 }
 
