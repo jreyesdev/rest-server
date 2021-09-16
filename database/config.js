@@ -1,4 +1,4 @@
-const mongose = require('mongose')
+const mongoose = require('mongoose')
 
 class DBMongo{
     constructor(){
@@ -14,7 +14,7 @@ class DBMongo{
 
     async connection(){
         try{
-            await mongose.connect(this.urlCluster(),{
+            await mongoose.connect(this.urlCluster(),{
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
                 useCreateIndex: true,
