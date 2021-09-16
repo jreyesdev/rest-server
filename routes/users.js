@@ -1,6 +1,6 @@
 const { Router } = require('express')
-const router = Router()
 const { check } = require('express-validator')
+const router = Router()
 
 const { getUsers, postUser, getUserById, putUser, deleteUser } = require('../controllers/userController')
 const { formRegister } = require('../middlewares/userRegister')
