@@ -35,8 +35,8 @@ class CategoryController extends Controller{
     async getAll(req = this.req, res = this.res){
         const { limite = 5, desde = 0, page = 1 } = req.query
         const [ total, cats ] = await Promise.all([
-            Categoria.countDocuments({ delete: null }),
-            Categoria.find({ delete: null })
+            Categoria.countDocuments({ deleted: null }),
+            Categoria.find({ deleted: null })
                 .skip(Number(desde))
                 .limit(Number(limite))
         ])
@@ -103,7 +103,7 @@ class CategoryController extends Controller{
             const data = {
                 updated: Date.now(),
                 updated_by: req.usuario._id,
-                delete: Date.now()
+                deleted: Date.now()
             }
             const categoria = await Categoria.findByIdAndUpdate(id,data)
             res.json({
