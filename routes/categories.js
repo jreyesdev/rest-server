@@ -1,13 +1,15 @@
 const { Router } = require('express')
 const router = Router()
 
-const { create, getById } = require('../controllers/categoryController')
-const { PostCategory, GetCategoryId } = require('../middlewares/categoryMiddleware')
+const { create, getById, getAll, updateId } = require('../controllers/categoryController')
+const { 
+    PostCategory, 
+    GetCategoryId, 
+    PutCategoryId, 
+    GetCategories } = require('../middlewares/categoryMiddleware')
 
 // Todas las categorias
-router.get('/',[
-    validarCampos
-],)
+router.get('/',GetCategories,getAll)
 
 // Crea categoria
 router.post('/',PostCategory,create)
@@ -16,9 +18,7 @@ router.post('/',PostCategory,create)
 router.get('/:id',GetCategoryId,getById)
 
 // Actualiza categoria
-router.put('/:id',[
-    validarCampos
-],)
+router.put('/:id',PutCategoryId,updateId)
 
 // Elimina categoria
 router.delete('/:id',[

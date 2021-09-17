@@ -5,6 +5,7 @@ class CategoryController extends Controller{
     constructor(){
         super()
     }
+
     async create(req = this.req, res = this.res){
         const name = req.body.name.toUpperCase()
         const categoria = await Categoria.findOne({ name })
@@ -54,7 +55,33 @@ class CategoryController extends Controller{
         }
     }
     
-    async getAll(req = this.req, res = this.res){}
+    async updateId(req = this.req, res = this.res){
+        const { id } = req.params
+        const name = req.body.name.toUpperCase()
+        try{
+            const cat = await Categoria.findOne({ name })
+            if(cat && cat.uid !== id){
+                return res.status(400).json({
+                    msg: `El nombre de categoria ${name} ya existe`
+                })
+            }
+            const upCat = new Categoria({
+                name,
+                updated: Date.now(),
+                updated_by: req.usuario._id
+            })
+            await upCat.save()
+            res.json({
+                msg: 'Updated category successfully',
+                categoria: upCat
+            })
+        }catch(e){
+            console.log(e)
+            res.status(500).json({
+                msg: 'Error al consultar categoria'
+            })
+        }
+    }
 }
 
 module.exports = new CategoryController()
