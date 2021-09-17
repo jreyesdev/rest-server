@@ -1,10 +1,8 @@
 const { Router } = require('express')
-const { check } = require('express-validator')
 const router = Router()
 
-const { validarCampos } = require('../middlewares/fieldsValidate')
-const { validateJWT } = require('../middlewares/jwtValidate')
-const { create } = require('../controllers/categoryController')
+const { create, getById } = require('../controllers/categoryController')
+const { PostCategory, GetCategoryId } = require('../middlewares/categoryMiddleware')
 
 // Todas las categorias
 router.get('/',[
@@ -12,16 +10,10 @@ router.get('/',[
 ],)
 
 // Crea categoria
-router.post('/',[
-    validateJWT,
-    check('name','Nombre es requerido').not().isEmpty(),
-    validarCampos
-],create)
+router.post('/',PostCategory,create)
 
 // Obtiene una categoria por id
-router.get('/:id',[
-    validarCampos
-],)
+router.get('/:id',GetCategoryId,getById)
 
 // Actualiza categoria
 router.put('/:id',[

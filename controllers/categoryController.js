@@ -32,6 +32,29 @@ class CategoryController extends Controller{
     }
 
     async getAll(req = this.req, res = this.res){}
+
+    async getById(req = this.req, res = this.res){
+        const { id } = req.params
+        try{
+            const categoria = await Categoria.findOne({
+                id,
+                delete: null
+            })
+            if(!categoria){
+                return res.status(400).json({
+                    msg: 'No existe categoria con id: ' + id
+                })
+            }
+            res.json({ categoria })
+        }catch(err){
+            console.log(err)
+            res.status(500).json({
+                msg: 'Error al consultar categoria'
+            })
+        }
+    }
+    
+    async getAll(req = this.req, res = this.res){}
 }
 
 module.exports = new CategoryController()
