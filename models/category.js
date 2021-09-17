@@ -24,14 +24,14 @@ const CategorySchema = Schema({
         ref: 'Usuario',
         default: null
     },
-    delete:{
+    deleted:{
         type: Date,
         default: null
     }
 })
 
 CategorySchema.methods.toJSON = function(){
-    const { __v, _id, ...categoria } = this.toObject()
+    const { __v, _id, deleted, ...categoria } = this.toObject()
     categoria.uid = _id
     return categoria
 }
