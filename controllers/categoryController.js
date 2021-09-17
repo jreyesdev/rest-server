@@ -37,6 +37,7 @@ class CategoryController extends Controller{
         const [ total, cats ] = await Promise.all([
             Categoria.countDocuments({ deleted: null }),
             Categoria.find({ deleted: null })
+                .populate('usuario','name')
                 .skip(Number(desde))
                 .limit(Number(limite))
         ])
@@ -55,6 +56,8 @@ class CategoryController extends Controller{
                 id,
                 delete: null
             })
+            .populate('usuario','name')
+
             if(!categoria){
                 return res.status(400).json({
                     msg: 'No existe categoria con id: ' + id
