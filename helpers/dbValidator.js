@@ -1,29 +1,33 @@
-const Rol = require('../models/rol')
-const Usuario = require('../models/user')
+const { Categoria, Role, Usuario } = require('../models')
 
-const isValidRol = async (rol='') => {
-    const role = await Rol.findOne({ rol })
-    if(!role){
-        throw new Error(`El rol ${role} no existe`)
+class DBValidator{
+    async isValidRol(rol=''){
+        const role = await Role.findOne({ rol })
+        if(!role){
+            throw new Error(`El rol ${role} no existe`)
+        }
+    }
+
+    async emailExists(email=''){
+        const correo = await Usuario.findOne({ email })
+        if(!correo){
+            throw new Error(`El correo ${correo} ya existe`)
+        }
+    }
+
+    async existsIdUser(id=''){
+        const user = await Usuario.findById({ id })
+        if(!user){
+            throw new Error(`El id ${id} no es válido`)
+        }
+    }
+
+    async existsIdCat(id=''){
+        const cat = await Categoria.findById({ id })
+        if(!cat){
+            throw new Error(`El id ${id} no es válido`)
+        }
     }
 }
 
-const emailExists = async (email = '') => {
-    const correo = await Usuario.findOne({ email })
-    if(!correo){
-        throw new Error(`El correo ${correo} ya existe`)
-    }
-}
-
-const existsIdUser = async (id = '') => {
-    const user = await Usuario.findById({ id })
-    if(!user){
-        throw new Error(`El id ${id} no es válido`)
-    }
-}
-
-module.exports = {
-    isValidRol,
-    emailExists,
-    existsIdUser
-}
+module.exports = new DBValidator()
