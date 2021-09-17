@@ -7,16 +7,15 @@ const {
     getAll, 
     updateId, 
     deleteId } = require('../controllers/categoryController')
-    
+
 const { 
-    GetCategories, 
     PostCategory, 
     GetCategoryId, 
     PutCategoryId, 
     DelCategoryId} = require('../middlewares/categoryMiddleware')
 
 // Todas las categorias
-router.get('/',GetCategories,getAll)
+router.get('/',getAll)
 
 // Crea categoria
 router.post('/',PostCategory,create)
