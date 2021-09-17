@@ -8,6 +8,9 @@ class CategoryMiddleware{
     constructor(){
         this.resp = []
     }
+    GetCategories(){
+        return this.retornoMid()
+    }
     PostCategory(){
         this.resp = [
             validateJWT,

@@ -32,7 +32,21 @@ class CategoryController extends Controller{
         }
     }
 
-    async getAll(req = this.req, res = this.res){}
+    async getAll(req = this.req, res = this.res){
+        const { limite = 5, desde = 0, page = 1 } = req.query
+        const [ total, cats ] = await Promise.all([
+            Categoria.countDocuments({ delete: null }),
+            Categoria.find({ delete: null })
+                .skip(Number(desde))
+                .limit(Number(limite))
+        ])
+        res.json({
+            limit: limite,
+            skip: desde,
+            total,
+            cats
+        })
+    }
 
     async getById(req = this.req, res = this.res){
         const { id } = req.params
