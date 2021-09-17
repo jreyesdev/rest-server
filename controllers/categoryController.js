@@ -92,7 +92,28 @@ class CategoryController extends Controller{
         }catch(e){
             console.log(e)
             res.status(500).json({
-                msg: 'Error al consultar categoria'
+                msg: 'Error al consultar categoria.'
+            })
+        }
+    }
+
+    async deleteId(req = this.req, res = this.res){
+        const { id } = req.params
+        try{
+            const data = {
+                updated: Date.now(),
+                updated_by: req.usuario._id,
+                delete: Date.now()
+            }
+            const categoria = await Categoria.findByIdAndUpdate(id,data)
+            res.json({
+                msg: 'Deleted category successfully',
+                categoria
+            })
+        }catch(e){
+            console.log(e)
+            res.status(500).json({
+                msg: 'Error al consultar categoria..'
             })
         }
     }

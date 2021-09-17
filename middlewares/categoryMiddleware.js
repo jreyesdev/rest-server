@@ -3,6 +3,7 @@ const { check } = require('express-validator')
 const { validarCampos } = require('./fieldsValidate')
 const { validateJWT } = require('./jwtValidate')
 const { existsIdCat } = require('../helpers/dbValidator')
+const { sameRole } = require('./roleValidate')
 
 class CategoryMiddleware{
     constructor(){
@@ -27,6 +28,14 @@ class CategoryMiddleware{
     PutCategoryId(){
         this.resp = [
             validateJWT,
+            check('id').custom(existsIdCat)
+        ]
+        return this.retornoMid()
+    }
+    DelCategoryId(){
+        this.resp = [
+            validateJWT,
+            sameRole('SUPER_ADMIN','ADMIN'),
             check('id').custom(existsIdCat)
         ]
         return this.retornoMid()

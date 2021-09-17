@@ -1,12 +1,19 @@
 const { Router } = require('express')
 const router = Router()
 
-const { create, getById, getAll, updateId } = require('../controllers/categoryController')
 const { 
+    create, 
+    getById, 
+    getAll, 
+    updateId, 
+    deleteId } = require('../controllers/categoryController')
+    
+const { 
+    GetCategories, 
     PostCategory, 
     GetCategoryId, 
     PutCategoryId, 
-    GetCategories } = require('../middlewares/categoryMiddleware')
+    DelCategoryId} = require('../middlewares/categoryMiddleware')
 
 // Todas las categorias
 router.get('/',GetCategories,getAll)
@@ -21,8 +28,6 @@ router.get('/:id',GetCategoryId,getById)
 router.put('/:id',PutCategoryId,updateId)
 
 // Elimina categoria
-router.delete('/:id',[
-    validarCampos
-],)
+router.delete('/:id',DelCategoryId,deleteId)
 
 module.exports = router
