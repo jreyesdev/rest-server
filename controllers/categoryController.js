@@ -82,12 +82,13 @@ class CategoryController extends Controller{
                     msg: `El nombre de categoria ${name} ya existe`
                 })
             }
-            const upCat = new Categoria({
+            const data = {
                 name,
                 updated: Date.now(),
                 updated_by: req.usuario._id
-            })
-            await upCat.save()
+            }
+            const upCat = await Categoria.findByIdAndUpdate(id,data,{ new: true })
+                .populate('usuario','name')
             res.json({
                 msg: 'Updated category successfully',
                 categoria: upCat
@@ -108,7 +109,7 @@ class CategoryController extends Controller{
                 updated_by: req.usuario._id,
                 deleted: Date.now()
             }
-            const categoria = await Categoria.findByIdAndUpdate(id,data)
+            const categoria = await Categoria.findByIdAndUpdate(id,data,{new: true})
             res.json({
                 msg: 'Deleted category successfully',
                 categoria

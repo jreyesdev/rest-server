@@ -25,6 +25,7 @@ class CategoryMiddleware{
     PutCategoryId(){
         this.resp = [
             validateJWT,
+            check('name','El nombre es requerido').not().isEmpty(),
             check('id').custom(existsIdCat)
         ]
         return this.retornoMid()
