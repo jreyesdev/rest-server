@@ -23,8 +23,9 @@ class Server{
 
     routes(){
         this.app.use('/api/auth',require('../routes/auth'))
-        this.app.use('/api/users',require('../routes/users'))
         this.app.use('/api/category',require('../routes/categories'))
+        this.app.use('/api/products',require('../routes/products'))
+        this.app.use('/api/users',require('../routes/users'))
     }
 
     listen(){
