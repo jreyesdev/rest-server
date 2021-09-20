@@ -1,13 +1,13 @@
 const { check } = require('express-validator')
 
-const { validarCampos } = require('./fieldsValidate')
+const Middleware = require('./index')
 const { validateJWT } = require('./jwtValidate')
 const { existsIdCat } = require('../helpers/dbValidator')
 const { sameRole } = require('./roleValidate')
 
-class CategoryMiddleware{
+class CategoryMiddleware extends Middleware{
     constructor(){
-        this.resp = []
+        super()
     }
     PostCategory(){
         this.resp = [
@@ -37,9 +37,6 @@ class CategoryMiddleware{
             check('id').custom(existsIdCat)
         ]
         return this.retornoMid()
-    }
-    retornoMid(){
-        return this.resp.push(validarCampos)
     }
 }
 
