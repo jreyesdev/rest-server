@@ -42,6 +42,21 @@ class ProductController extends Controller{
             })
         }
     }
+    async getProduct(req = this.req, res = this.res){
+        const { id } = req.body
+        try {
+            const product = await Producto.findById({id})
+                .populate('usuario','name')
+                .populate('categoria','name')
+
+            res.json({ product })
+        }catch(e){
+            console.log(e)
+            res.status(500).json({
+                msg: 'Error al consultar producto'
+            })
+        }
+    }
 }
 
 module.exports = new ProductController()

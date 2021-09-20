@@ -2,7 +2,10 @@ const { check } = require('express-validator')
 
 const Middleware = require('./index')
 const { validateJWT } = require('./jwtValidate')
-const { existsIdCat, existsProductName } = require('../helpers/dbValidator')
+const { 
+    existsIdCat, 
+    existsProductName, 
+    existsProductId } = require('../helpers/dbValidator')
 const { sameRole } = require('./roleValidate')
 
 class ProductMiddleware extends Middleware{
@@ -18,7 +21,11 @@ class ProductMiddleware extends Middleware{
             check('category').custom(existsIdCat),
             check('name').custom(existsProductName)
         ]
-        this.retornoMid()
+        return this.retornoMid()
+    }
+    GetProductById(){
+        this.resp = [ check('id').custom(existsProductId) ]
+        return this.retornoMid()
     }
 }
 

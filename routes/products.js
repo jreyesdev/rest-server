@@ -1,9 +1,16 @@
 const { Router } = require('express')
 const router = Router()
 
-const { getProducts } = require('../controllers/productController')
+const { 
+    addProduct,
+    getProduct, 
+    getProducts,
+} = require('../controllers/productController')
 
-const { PostProduct } = require('../middlewares/productMiddleware')
+const { 
+    GetProductById,
+    PostProduct, 
+} = require('../middlewares/productMiddleware')
 
 // Middleware para todas las rutas
 router.use((req,res,next)=>{
@@ -14,10 +21,10 @@ router.use((req,res,next)=>{
 // Todos los productos
 router.get('',getProducts)
 // Crea un porducto
-router.post('',PostProduct,)
-/*
+router.post('',PostProduct,addProduct)
 // Muestra un producto por id
-router.get('/:id',)
+router.get('/:id',GetProductById,getProduct)
+/*
 // Actualiza producto por id
 router.put('/:id',)
 // Elimina un producto por id

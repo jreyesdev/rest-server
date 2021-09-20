@@ -37,6 +37,10 @@ class DBValidator{
             throw new Error(`El producto ${name} ya existe en la categoria`)
         }
     }
+    async existsProductId(id=''){
+        const prod = await Producto.findById({id})
+        if(!prod) throw new Error(`El id ${id} no es válido`)
+    }
 }
 
 module.exports = new DBValidator()
