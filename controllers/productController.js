@@ -43,8 +43,8 @@ class ProductController extends Controller{
         }
     }
     async getProduct(req = this.req, res = this.res){
-        const { id } = req.body
-        try {
+        const { id } = req.params
+        try{
             const product = await Producto.findById({id})
                 .populate('usuario','name')
                 .populate('categoria','name')
@@ -54,6 +54,35 @@ class ProductController extends Controller{
             console.log(e)
             res.status(500).json({
                 msg: 'Error al consultar producto'
+            })
+        }
+    }
+    async updateProduct(req = this.req, res = this.res){
+        const { name, stock, price, description, category } = req.body
+        const { id } = req.params
+        try{
+            const prod = await Producto.findOne({ name, category, deleted: null })
+            if(prod && prod._id !== id){
+                return res.status(400).json({
+                    msg: `EL producto ya existe en la categoria`
+                })
+            }
+            const data = {
+                name, stock, price, description, category,
+                updated: Date.now(),
+                updated_by: req.usuario._id
+            }
+            const product = await Producto.findByIdAndUpdate(id,data,{ new: true})
+                .populate('usuario','name')
+                .populate('categoria','name')
+            res.json({
+                msg: 'Updated product successfully',
+                product
+            })
+        }catch(e){
+            console.log(e)
+            res.status(500).json({
+                msg: 'Error al actualizar producto'
             })
         }
     }

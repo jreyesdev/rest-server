@@ -27,6 +27,17 @@ class ProductMiddleware extends Middleware{
         this.resp = [ check('id').custom(existsProductId) ]
         return this.retornoMid()
     }
+    PutProductById(){
+        this.resp = [ 
+            validateJWT,
+            check('id').custom(existsProductId),
+            check('name','El nombre es requerido').not().isEmpty(),
+            check('stock','Cantidad debe ser numérico').isInt(),
+            check('price','Precio debe ser numérico').isNumeric(),
+            check('category').custom(existsIdCat)
+        ]
+        return this.retornoMid()
+    }
 }
 
 module.exports = new ProductMiddleware()

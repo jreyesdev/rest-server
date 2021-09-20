@@ -5,11 +5,13 @@ const {
     addProduct,
     getProduct, 
     getProducts,
+    updateProduct,
 } = require('../controllers/productController')
 
 const { 
     GetProductById,
-    PostProduct, 
+    PostProduct,
+    PutProductById, 
 } = require('../middlewares/productMiddleware')
 
 // Middleware para todas las rutas
@@ -24,9 +26,9 @@ router.get('',getProducts)
 router.post('',PostProduct,addProduct)
 // Muestra un producto por id
 router.get('/:id',GetProductById,getProduct)
-/*
 // Actualiza producto por id
-router.put('/:id',)
+router.put('/:id',PutProductById,updateProduct)
+/*
 // Elimina un producto por id
 router.delete('/:id',)
 */
