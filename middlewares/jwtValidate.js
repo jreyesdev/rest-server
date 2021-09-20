@@ -1,7 +1,7 @@
 const { validar } = require('../helpers/jwtFunctions')
 const Usuario = require('../models/user')
 
-const validateJWT = (req, res, next) => {
+const validateJWT = async (req, res, next) => {
     const token = req.header('x-token')
     if(!token){
         return res.status(401).json({
