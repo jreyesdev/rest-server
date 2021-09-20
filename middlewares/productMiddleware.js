@@ -38,6 +38,14 @@ class ProductMiddleware extends Middleware{
         ]
         return this.retornoMid()
     }
+    DelProductById(){
+        this.resp = [
+            validateJWT,
+            sameRole('SUPER_ADMIN','ADMIN'),
+            check('id').custom(existsProductId)
+        ]
+        return this.retornoMid()
+    }
 }
 
 module.exports = new ProductMiddleware()

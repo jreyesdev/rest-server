@@ -86,6 +86,28 @@ class ProductController extends Controller{
             })
         }
     }
+    async deleteProduct(req = this.req, res = this.res){
+        const { id } = req.params
+        try{
+            const data = {
+                updated: Date.now(),
+                updated_by: req.usuario._id,
+                deleted: Date.now()
+            }
+            const product = await Producto.findByIdAndUpdate(id,data)
+                .populate('usuario','name')
+                .populate('categoria','name')
+            res.json({
+                msg: 'Deleted product successfully',
+                product
+            })
+        }catch(e){
+            console.log(e)
+            res.status(500).json({
+                msg: 'Error al eliminar producto'
+            })
+        }
+    }
 }
 
 module.exports = new ProductController()
