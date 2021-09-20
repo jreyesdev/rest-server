@@ -3,6 +3,8 @@ const router = Router()
 
 const { getProducts } = require('../controllers/productController')
 
+const { PostProduct } = require('../middlewares/productMiddleware')
+
 // Middleware para todas las rutas
 router.use((req,res,next)=>{
     console.log('Consulta ruta producto: ' + new Date(Date.now()))
@@ -11,9 +13,9 @@ router.use((req,res,next)=>{
 
 // Todos los productos
 router.get('',getProducts)
-/*
 // Crea un porducto
-router.post('',)
+router.post('',PostProduct,)
+/*
 // Muestra un producto por id
 router.get('/:id',)
 // Actualiza producto por id

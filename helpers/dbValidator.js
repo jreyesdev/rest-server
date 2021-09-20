@@ -1,4 +1,4 @@
-const { Categoria, Role, Usuario } = require('../models')
+const { Categoria, Role, Usuario, Producto } = require('../models')
 
 class DBValidator{
     async isValidRol(rol=''){
@@ -26,6 +26,15 @@ class DBValidator{
         const cat = await Categoria.findById({ id })
         if(!cat){
             throw new Error(`El id ${id} no es válido`)
+        }
+    }
+    async existsProductName(name='',{ req }){
+        const prod = await Producto.findOne({
+            name,
+            category: req.body.category
+        })
+        if(!prod){
+            throw new Error(`El producto ${name} ya existe en la categoria`)
         }
     }
 }
