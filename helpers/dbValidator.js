@@ -4,14 +4,14 @@ class DBValidator{
     async isValidRol(rol=''){
         const role = await Role.findOne({ rol })
         if(!role){
-            throw new Error(`El rol ${role} no existe`)
+            throw new Error(`El rol ${rol} no existe`)
         }
     }
 
     async emailExists(email=''){
         const correo = await Usuario.findOne({ email })
-        if(!correo){
-            throw new Error(`El correo ${correo} ya existe`)
+        if(correo){
+            throw new Error(`El correo ${correo.email} ya existe`)
         }
     }
 
