@@ -1,29 +1,26 @@
 const mongoose = require('mongoose')
 
-class DBMongo{
-    constructor(){
-        this.name = process.env.DB_NAME
-        this.user = process.env.DB_USERNAME
-        this.pass = process.env.DB_PASS
-        this.cluster = process.env.DB_CLUSTER
-    }
-
-    get urlCluster(){
-        return `mongodb+srv://${this.user}:${this.pass}@${this.cluster}/${this.name}?retryWrites=true&w=majority`
-    }
-
+class DBMongo{    
     async connection(){
+        const { 
+            DB_CLUSTER: cluster, 
+            DB_NAME: database, 
+            DB_USERNAME: username, 
+            DB_PASS: pass } = process.env
+
+        let url = `mongodb+srv://${username}:${pass}@${cluster}/${database}?retryWrites=true&w=majority`
+        
         try{
-            await mongoose.connect(this.urlCluster(),{
+            await mongoose.connect(url,{
                 useNewUrlParser: true,
                 useUnifiedTopology: true,
-                useCreateIndex: true,
-                useFindAndModify: false
+                //useCreateIndex: true,
+                //useFindAndModify: false
             })
 
-            console.log('DB is connected')
-            
+            console.log('DB is connected')            
         }catch(err){
+            console.error('Error to connect database')
             console.error(err)
             throw new Error(err)
         }
