@@ -20,7 +20,7 @@ class AuthController extends Controller{
             msg = msg ? { msg: failLogin }
                 : {
                     user,
-                    token: await generar(user.uid)
+                    token: await generar(user._id)
                 }
             res.status(msg ? 400 : 200).json(msg)
         }catch(err){
