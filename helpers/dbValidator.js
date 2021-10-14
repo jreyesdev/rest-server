@@ -16,14 +16,14 @@ class DBValidator{
     }
 
     async existsIdUser(id=''){
-        const user = await Usuario.findById({ id })
+        const user = await Usuario.findById({ _id: id })
         if(!user){
             throw new Error(`El id ${id} no es válido`)
         }
     }
 
     async existsIdCat(id=''){
-        const cat = await Categoria.findById({ id })
+        const cat = await Categoria.findById({ _id: id })
         if(!cat){
             throw new Error(`El id ${id} no es válido`)
         }
@@ -33,12 +33,12 @@ class DBValidator{
             name,
             category: req.body.category
         })
-        if(!prod){
+        if(prod){
             throw new Error(`El producto ${name} ya existe en la categoria`)
         }
     }
     async existsProductId(id=''){
-        const prod = await Producto.findById({id})
+        const prod = await Producto.findById({ _id: id })
         if(!prod) throw new Error(`El id ${id} no es válido`)
     }
 }
