@@ -1,13 +1,11 @@
 const { validarCampos } = require("./fieldsValidate")
 
 class Middleware{
-    constructor(){
-        this.resp = []
-    }
     // Respuesta de middlewares
-    retornoMid(){
-        return this.resp.push(validarCampos)
+    retornoMid(mids){
+        mids.push(validarCampos)
+        return mids
     }
 }
 
-module.exports = Middleware
+module.exports = new Middleware()
