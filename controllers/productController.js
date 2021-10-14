@@ -1,16 +1,14 @@
-const Controller = require('./controller')
 const { Producto } = require('../models')
 
-class ProductController extends Controller{
-    constructor(){
-        super()
-    }
-    async getProducts(req = this.req, res = this.res){
+class ProductController{
+    async getProducts(req, res){
         const { limite = 5, desde = 0, page = 1 } = req.query
         const [ total, prods ] = await Promise.all([
             Producto.countDocuments({ deleted: null }),
             Producto.find({ deleted: null })
-                .populate('usuario','name')
+                .populate('category','name')
+                .populate('created_by','name')
+                .populate('updated_by','name')
                 .skip(Number(desde))
                 .limit(Number(limite))
         ])
@@ -21,7 +19,7 @@ class ProductController extends Controller{
             prods
         })
     }
-    async addProduct(req = this.req, res = this.res){
+    async addProduct(req, res){
         const { 
             name, stock, price, 
             category, description = null } = req.body
@@ -42,12 +40,13 @@ class ProductController extends Controller{
             })
         }
     }
-    async getProduct(req = this.req, res = this.res){
+    async getProduct(req, res){
         const { id } = req.params
         try{
-            const product = await Producto.findById({id})
-                .populate('usuario','name')
-                .populate('categoria','name')
+            const product = await Producto.findById({ _id: id, deleted: null })
+                .populate('category','name')
+                .populate('created_by','name')
+                .populate('updated_by','name')
 
             res.json({ product })
         }catch(e){
@@ -57,12 +56,12 @@ class ProductController extends Controller{
             })
         }
     }
-    async updateProduct(req = this.req, res = this.res){
+    async updateProduct(req, res){
         const { name, stock, price, description, category } = req.body
         const { id } = req.params
         try{
             const prod = await Producto.findOne({ name, category, deleted: null })
-            if(prod && prod._id !== id){
+            if(prod && prod._id.toString() !== id){
                 return res.status(400).json({
                     msg: `EL producto ya existe en la categoria`
                 })
@@ -73,8 +72,9 @@ class ProductController extends Controller{
                 updated_by: req.usuario._id
             }
             const product = await Producto.findByIdAndUpdate(id,data,{ new: true})
-                .populate('usuario','name')
-                .populate('categoria','name')
+                .populate('category','name')
+                .populate('created_by','name')
+                .populate('updated_by','name')
             res.json({
                 msg: 'Updated product successfully',
                 product
@@ -86,7 +86,7 @@ class ProductController extends Controller{
             })
         }
     }
-    async deleteProduct(req = this.req, res = this.res){
+    async deleteProduct(req, res){
         const { id } = req.params
         try{
             const data = {
@@ -95,8 +95,9 @@ class ProductController extends Controller{
                 deleted: Date.now()
             }
             const product = await Producto.findByIdAndUpdate(id,data)
-                .populate('usuario','name')
-                .populate('categoria','name')
+                .populate('category','name')
+                .populate('created_by','name')
+                .populate('updated_by','name')
             res.json({
                 msg: 'Deleted product successfully',
                 product
