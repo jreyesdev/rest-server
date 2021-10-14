@@ -1,12 +1,7 @@
-const Controller = require('./controller')
 const { Categoria } = require('../models')
 
-class CategoryController extends Controller{
-    constructor(){
-        super()
-    }
-
-    async create(req = this.req, res = this.res){
+class CategoryController{
+    async create(req, res){
         const name = req.body.name.toUpperCase()
         const categoria = await Categoria.findOne({ name })
         if(categoria){
@@ -17,7 +12,7 @@ class CategoryController extends Controller{
         try {
             const newCat = new Categoria({
                 name,
-                created_by: req.usuario.uid
+                created_by: req.usuario._id
             })
             await newCat.save();
             res.json({
@@ -32,12 +27,13 @@ class CategoryController extends Controller{
         }
     }
 
-    async getAll(req = this.req, res = this.res){
+    async getAll(req, res){
         const { limite = 5, desde = 0, page = 1 } = req.query
         const [ total, cats ] = await Promise.all([
             Categoria.countDocuments({ deleted: null }),
             Categoria.find({ deleted: null })
-                .populate('usuario','name')
+                .populate('created_by','name')
+                .populate('updated_by','name')
                 .skip(Number(desde))
                 .limit(Number(limite))
         ])
@@ -49,14 +45,15 @@ class CategoryController extends Controller{
         })
     }
 
-    async getById(req = this.req, res = this.res){
+    async getById(req, res){
         const { id } = req.params
         try{
             const categoria = await Categoria.findOne({
-                id,
-                delete: null
+                _id: id,
+                deleted: null
             })
-            .populate('usuario','name')
+            .populate('created_by','name')
+            .populate('updated_by','name')
 
             if(!categoria){
                 return res.status(400).json({
@@ -72,12 +69,12 @@ class CategoryController extends Controller{
         }
     }
     
-    async updateId(req = this.req, res = this.res){
+    async updateId(req, res){
         const { id } = req.params
         const name = req.body.name.toUpperCase()
         try{
             const cat = await Categoria.findOne({ name })
-            if(cat && cat.uid !== id){
+            if(cat && cat._id.toString() !== id){
                 return res.status(400).json({
                     msg: `El nombre de categoria ${name} ya existe`
                 })
@@ -85,10 +82,11 @@ class CategoryController extends Controller{
             const data = {
                 name,
                 updated: Date.now(),
-                updated_by: req.usuario._id
+                updated_by: req.usuario._id,
             }
             const upCat = await Categoria.findByIdAndUpdate(id,data,{ new: true })
-                .populate('usuario','name')
+                .populate('created_by','name')
+                .populate('updated_by','name')
             res.json({
                 msg: 'Updated category successfully',
                 categoria: upCat
@@ -101,7 +99,7 @@ class CategoryController extends Controller{
         }
     }
 
-    async deleteId(req = this.req, res = this.res){
+    async deleteId(req, res){
         const { id } = req.params
         try{
             const data = {
