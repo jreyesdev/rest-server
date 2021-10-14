@@ -10,7 +10,7 @@ const validateJWT = async (req, res, next) => {
     }
     try{
         const { uid } = validar(token)
-        const usuario = await Usuario.find({
+        const usuario = await Usuario.findOne({
             _id: uid,
             delete: false
         })
