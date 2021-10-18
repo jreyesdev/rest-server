@@ -50,6 +50,14 @@ const subirArchivo = async (file, extensiones, dir = "") => {
   })
 }
 
+const getFile = async(file) => {
+  const pathFile = path.join(UPLOADS_PATH,file)
+  return (await fs.existsSync(pathFile)) ? pathFile
+    : false
+}
+
+const noImageFound = () => path.join(UPLOADS_PATH,'no-image.jpg')
+
 const deleteFile = async(file) => {
   const pathFile = path.join(UPLOADS_PATH,file)
   if(fs.existsSync(pathFile)) await fs.unlinkSync(pathFile)
@@ -65,6 +73,8 @@ const allowedCollec = async(col='') => {
 module.exports = {
   allowedCollec,
   deleteFile,
+  getFile,
+  noImageFound,
   subirArchivo,
   validarArchivo
 }
