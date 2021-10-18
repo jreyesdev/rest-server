@@ -38,6 +38,14 @@ const subirArchivo = async (file, extensiones, dir = "") => {
   })
 }
 
+const allowedCollec = async(col='') => {
+  const collects = ['users','products']
+  if(!collects.includes(col)){
+    throw new Error(`Coleccion ${col} no permitida. Las permitidas son: ${collects.join(', ')}`)
+  }
+}
+
 module.exports = {
   subirArchivo,
+  allowedCollec
 }
