@@ -10,6 +10,12 @@ const PostArchivo = retornoMid([
     validarArchivo
 ])
 
+const GetImage = retornoMid([
+    check('id','El id debe ser id de mongo').isMongoId(),
+    check('col').custom(allowedCollec),
+    check('col').custom(existsCollectId),
+])
+
 const PutImage = retornoMid([
     validateJWT,
     validarArchivo,
@@ -19,6 +25,7 @@ const PutImage = retornoMid([
 ])
 
 module.exports = {
+    GetImage,
     PostArchivo,
     PutImage
 }

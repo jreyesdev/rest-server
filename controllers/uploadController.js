@@ -1,4 +1,9 @@
-const { deleteFile, subirArchivo } = require("../helpers/subirArchivo");
+const { 
+    deleteFile, 
+    subirArchivo, 
+    getFile, 
+    noImageFound } = require("../helpers/subirArchivo");
+
 const { Producto, Usuario } = require("../models");
 
 class UploadController {
@@ -54,6 +59,29 @@ class UploadController {
             msg: 'Updated image',
             fileName
         })
+    }catch(err){
+        console.log(err)
+        res.status(500).json({ msg: 'Error...', err })
+    }
+  }
+  async getImg(req, res){
+    const { col, id } = req.params
+    let model, filePath
+
+    switch(col){
+        case 'users':
+            model = await Usuario.findById({ _id: id})
+            break
+        case 'products':
+            model = await Producto.findById({ _id: id })
+            break
+    }
+
+    try{
+        filePath = (model.image && model.image !== '') ? 
+            (await getFile(model.image) || noImageFound()) 
+            : noImageFound()
+        res.sendFile(filePath)
     }catch(err){
         console.log(err)
         res.status(500).json({ msg: 'Error...', err })
