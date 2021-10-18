@@ -1,11 +1,11 @@
 const { Router } = require('express')
 const router = Router()
 
-const { PutImage } = require('../middlewares/uploadMiddleware')
+const { PutImage, PostArchivo } = require('../middlewares/uploadMiddleware')
 
 const { cargarArchivo, putImg } = require('../controllers/uploadController')
 
-router.post('', cargarArchivo)
+router.post('', PostArchivo, cargarArchivo)
 
 router.put('/:col/:id', PutImage, putImg)
 
