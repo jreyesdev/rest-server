@@ -22,6 +22,10 @@ const ProductSchema = Schema({
         ref: 'Categoria',
         required: [true,'Category is required']
     },
+    image:{
+        type: String,
+        default: null
+    },
     created:{
         type: Date,
         default: Date.now
