@@ -18,7 +18,7 @@ form.addEventListener("submit", (e) => {
     .then((resp) => resp.json())
     .then(({ errors, msg, token }) => {
       if (errors || msg) {
-        console.log(erros);
+        console.log(errors,msg);
       } else {
         localStorage.setItem("token", token);
         window.location = 'chat.html';
