@@ -9,11 +9,7 @@ const validateJWT = async (req, res, next) => {
         })
     }
     try{
-        const { uid } = validar(token)
-        const usuario = await Usuario.findOne({
-            _id: uid,
-            delete: false
-        })
+        const usuario = await comprobarJWT(token)
         if(!usuario){
             return res.status(401).json({
                 msg: 'Token no existe'
@@ -29,6 +25,20 @@ const validateJWT = async (req, res, next) => {
     }
 }
 
+const comprobarJWT = async (token = '') => {
+    try{
+        const { uid } = await validar(token)
+        const usuario = await Usuario.findOne({
+            _id: uid,
+            delete: false
+        })
+        return usuario ? usuario : null;
+    }catch(e){
+        return null;
+    }
+}
+
 module.exports = {
-    validateJWT
+    validateJWT,
+    comprobarJWT
 }
