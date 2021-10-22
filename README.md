@@ -1,5 +1,5 @@
 # API REST Server
-API REST con express y MongoDB con login de Google
+API REST con Express y MongoDB. Login de Google y Chat con Socket.io
 
 ## Instalación
 ```node
