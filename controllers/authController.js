@@ -1,15 +1,11 @@
 const bcrypt = require('bcryptjs')
 
-const Controller = require('./controller')
 const Usuario = require('../models/user')
 const { generar } = require('../helpers/jwtFunctions')
 const { googleVerify } = require('../helpers/googleVerify')
 
-class AuthController extends Controller{
-    constructor(){
-        super()
-    }
-    async login(req = this.req, res = this.res){
+class AuthController{
+    async login(req, res){
         const { email, password } = req.body
         try{
             let msg = false, failLogin = 'Email y password no son válidos'
@@ -22,7 +18,7 @@ class AuthController extends Controller{
                     user,
                     token: await generar(user._id)
                 }
-            res.status(msg ? 400 : 200).json(msg)
+            res.status(msg.msg ? 400 : 200).json(msg)
         }catch(err){
             console.log(err)
             res.status(500).json({
@@ -31,7 +27,7 @@ class AuthController extends Controller{
         }
     }
 
-    async googleSingIn(req = this.req, res = this.res){
+    async googleSingIn(req, res){
         const { id_token } = req.body
         try {
             const { email, name, image } = await googleVerify(id_token)
@@ -51,7 +47,7 @@ class AuthController extends Controller{
                     msg: 'Contacte al administrador'
                 })
             }
-            const token = await generar(usuario.uid)            
+            const token = await generar(usuario._id)            
             res.json({
                 msg: 'Google singin successfully',
                 user: googleUser,
@@ -63,6 +59,14 @@ class AuthController extends Controller{
                 msg: 'Token Google no válido'
             })
         }
+    }
+    async renovarToken(req, res){
+        const user = req.usuario
+        const token = await generar(user._id)
+        res.json({
+            user,
+            token
+        })
     }
 }
 
