@@ -21,6 +21,7 @@ form.addEventListener("submit", (e) => {
         console.log(erros);
       } else {
         localStorage.setItem("token", token);
+        window.location = 'chat.html';
       }
       btn.disabled = false;
     })
@@ -47,6 +48,7 @@ function onSignIn(googleUser) {
     .then((resp) => resp.json())
     .then(({ token }) => {
       localStorage.setItem("token", token);
+      window.location = 'chat.html';
     })
     .catch((err) => console.log(err));
 }
