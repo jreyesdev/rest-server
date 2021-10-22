@@ -1,16 +1,22 @@
-const compression = require('express-compression')
+const compression = require('compression')
 const express = require('express')
+const { createServer } = require('http')
 const cors = require('cors')
 const fileUpload = require('express-fileupload')
+
 const { connection } = require('../database/config')
+const { socketController } = require('../controllers/sockets/socketController')
 
 class Server{
     constructor(){
-        this.app = express()
         this.port = process.env.APP_PORT
+        this.app = express()
+        this.server = createServer(this.app)
+        this.io = require('socket.io')(this.server)
         this.dbconnect()
         this.middlewares()
         this.routes()
+        this.socketsEvents()
     }
 
     async dbconnect(){
@@ -37,8 +43,12 @@ class Server{
         this.app.use('/api/users',require('../routes/users'))
     }
 
+    socketsEvents(){
+        this.io.on('connection', socketController)
+    }
+
     listen(){
-        this.app.listen(this.port,() => console.log(`Server on port ${this.port}`))
+        this.server.listen(this.port,() => console.log(`Server on port ${this.port}`))
     }
 }
 
